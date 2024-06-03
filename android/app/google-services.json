@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "63000331937",
+    "project_id": "rentware-e468b",
+    "storage_bucket": "rentware-e468b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63000331937:android:6107a217e8c6814e1b52e0",
+        "android_client_info": {
+          "package_name": "com.example.rentware"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCan3jhZcSvwzoAZBOpAFA-GN7h7l7kJCI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
