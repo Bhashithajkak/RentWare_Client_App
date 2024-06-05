@@ -1,4 +1,3 @@
-// login_view_model.dart
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rentware/models/firebase_service.dart';
@@ -7,6 +6,8 @@ class LoginViewModel extends ChangeNotifier {
   final FirebaseService _firebaseService =
       GetIt.instance.get<FirebaseService>();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   bool _isLoggingIn = false;
   bool get isLoggingIn => _isLoggingIn;
@@ -47,10 +48,14 @@ class LoginViewModel extends ChangeNotifier {
 
     bool result =
         await _firebaseService.loginUser(email: _email!, password: _password!);
-
     _isLoggingIn = false;
-
-    if (!result) {
+    if (result) {
+      _email = null;
+      _password = null;
+      emailController.clear();
+      passwordController.clear();
+      formKey.currentState!.reset();
+    } else {
       _errorMessage = "Invalid email or password!";
     }
 

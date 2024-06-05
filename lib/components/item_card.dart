@@ -21,7 +21,8 @@ class ItemCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Color(product.bgColor),
                 borderRadius: BorderRadius.circular(16),
-                image: DecorationImage(image: NetworkImage(product.imageUrl)),
+                image: DecorationImage(
+                    image: NetworkImage(product.imageUrl), fit: BoxFit.contain),
               ),
             ),
           ),
@@ -30,13 +31,14 @@ class ItemCard extends StatelessWidget {
             child: Text(
               // products is out demo list
               product.title,
-              style: TextStyle(color: kTextLightColor),
+              style: const TextStyle(
+                  color: kTextColor, fontWeight: FontWeight.w500),
             ),
           ),
           Text(
             "\$${product.price}",
             style: TextStyle(fontWeight: FontWeight.bold),
-          )
+          ),
         ],
       ),
     );

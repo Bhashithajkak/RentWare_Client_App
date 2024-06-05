@@ -1,5 +1,3 @@
-// views/details_screen_view.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rentware/components/custom_app_bar.dart';

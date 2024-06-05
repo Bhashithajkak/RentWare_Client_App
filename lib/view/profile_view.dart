@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rentware/constants.dart';
 import 'package:rentware/view_model/profile_view_model.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -11,9 +12,8 @@ class ProfilePage extends StatelessWidget {
       create: (_) => ProfileViewModel(),
       child: Consumer<ProfileViewModel>(
         builder: (context, viewModel, child) {
-          final Size size = MediaQuery.of(context).size;
-          final double deviceHeight = size.height;
-          final double deviceWidth = size.width;
+          final double deviceHeight = MediaQuery.of(context).size.height;
+          final double deviceWidth = MediaQuery.of(context).size.width;
 
           return Center(
             child: Container(
@@ -28,6 +28,7 @@ class ProfilePage extends StatelessWidget {
                   children: [
                     _profileImage(viewModel, deviceHeight),
                     _profileDetails(viewModel, deviceHeight),
+                    _profileBody(deviceWidth),
                   ],
                 ),
               ),
@@ -39,24 +40,39 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _profileImage(ProfileViewModel viewModel, double deviceHeight) {
-    return Center(
-      child: Container(
-        margin: EdgeInsets.only(bottom: deviceHeight * 0.02),
+    return Container(
+      margin: EdgeInsets.only(bottom: deviceHeight * 0.02),
+      child: SizedBox(
         height: deviceHeight * 0.15,
         width: deviceHeight * 0.15,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: NetworkImage(viewModel.profileImage),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: Offset(0, 3),
+        child: Stack(
+          fit: StackFit.expand,
+          clipBehavior: Clip.none,
+          children: [
+            CircleAvatar(
+              backgroundImage: NetworkImage(viewModel.profileImage),
             ),
+            Positioned(
+              right: -12,
+              bottom: 0,
+              child: SizedBox(
+                height: 46,
+                width: 46,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xFFF5F6F9),
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.black)),
+                  child: IconButton(
+                    onPressed: () {
+                      viewModel.changeProfilePicture();
+                    },
+                    icon: Icon(Icons.add_a_photo_outlined),
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -73,14 +89,85 @@ class ProfilePage extends StatelessWidget {
               viewModel.name,
               style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
             ),
-            SizedBox(height: deviceHeight * 0.01),
+            SizedBox(height: deviceHeight * 0.005),
             Text(
               viewModel.email,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _profileBodyItem(
+      {required double deviceWidth, required Icon icon, required String text}) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: deviceWidth * 0.02),
+      padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.02),
+      child: GestureDetector(
+        onTap: () {
+          // Define the action to be taken when the widget is tapped
+        },
+        child: Container(
+          height: 60,
+          padding: EdgeInsets.all(deviceWidth * 0.02),
+          decoration: BoxDecoration(
+            color: Color(0xFFD5D6D9),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              icon,
+              SizedBox(
+                width: deviceWidth * 0.02,
+              ),
+              Expanded(
+                child: Text(
+                  text,
+                  style: const TextStyle(
+                    color: kTextColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              const Icon(
+                Icons.arrow_forward_ios,
+                color: kTextColor,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _profileBody(double deviceWidth) {
+    return Container(
+      child: Column(children: [
+        _profileBodyItem(
+          deviceWidth: deviceWidth,
+          icon: Icon(Icons.account_circle_outlined),
+          text: 'My Account',
+        ),
+        _profileBodyItem(
+          deviceWidth: deviceWidth,
+          icon: Icon(Icons.circle_notifications_outlined),
+          text: 'Notifications',
+        ),
+        _profileBodyItem(
+          deviceWidth: deviceWidth,
+          icon: Icon(Icons.settings),
+          text: 'Settings',
+        ),
+        _profileBodyItem(
+          deviceWidth: deviceWidth,
+          icon: Icon(Icons.help_sharp),
+          text: 'Help Center',
+        ),
+      ]),
     );
   }
 }

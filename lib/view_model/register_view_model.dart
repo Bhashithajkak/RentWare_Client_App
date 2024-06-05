@@ -1,4 +1,3 @@
-// register_view_model.dart
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rentware/models/firebase_service.dart';
@@ -10,6 +9,8 @@ class RegisterViewModel extends ChangeNotifier {
 
   String? _name;
   String? get name => _name;
+
+  get nameController => null;
   set name(String? value) {
     _name = value;
     notifyListeners();

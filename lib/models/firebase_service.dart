@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:rentware/models/Product.dart';
+import 'package:path/path.dart' as p;
 
 const String USER_COLLECTION = 'users';
 const String PRODUCT_COLLECTION = 'products';
@@ -13,7 +16,7 @@ class FirebaseService {
   FirebaseStorage _storage = FirebaseStorage.instance;
   FirebaseFirestore _db = FirebaseFirestore.instance;
   Map? currentUser;
-  String? _currentUserId;
+  String? _currentUserId = 'ITvnyDB5o7UBlSsINYsByi7IQ7B2';
 
   FirebaseService();
 
@@ -114,5 +117,23 @@ class FirebaseService {
 
       return favoriteItems;
     });
+  }
+
+  Future<bool> changeProfileImage(File image) async {
+    String fileName = _currentUserId.toString() + p.extension(image.path);
+    try {
+      UploadTask _task =
+          _storage.ref('profile_images/$fileName').putFile(image);
+      return _task.then((_snapshot) async {
+        String _profileUrl = await _snapshot.ref.getDownloadURL();
+        await _db
+            .collection(USER_COLLECTION)
+            .doc(_currentUserId)
+            .update({'image': _profileUrl});
+        return true;
+      });
+    } catch (e) {
+      return false;
+    }
   }
 }

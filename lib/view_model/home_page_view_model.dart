@@ -6,6 +6,7 @@ import 'package:rentware/models/Product.dart';
 class HomePageViewModel extends ChangeNotifier {
   final FirebaseService _firebaseService =
       GetIt.instance.get<FirebaseService>();
+  List<Product> _products = [];
   List<Product> _filteredProducts = [];
   List<Product> _searchedProducts = [];
   List<String> categories = ["All", "Men", "Women", "Kids"];
@@ -24,13 +25,14 @@ class HomePageViewModel extends ChangeNotifier {
   }
 
   Future<void> _fetchProducts() async {
-    var productSnapshot = await _firebaseService.getProducts().first;
-    List<Product> products = productSnapshot.docs
-        .map((doc) => Product.fromMap(doc.data() as Map<String, dynamic>))
-        .toList();
-    _filteredProducts = products;
-    _searchProducts(searchController.text);
-    notifyListeners();
+    _firebaseService.getProducts().listen((productSnapshot) {
+      _products = productSnapshot.docs
+          .map((doc) => Product.fromMap(doc.data() as Map<String, dynamic>))
+          .toList();
+      _filteredProducts = _products;
+      _searchProducts(searchController.text);
+      notifyListeners();
+    });
   }
 
   void updateCategory(int index) {
@@ -42,9 +44,9 @@ class HomePageViewModel extends ChangeNotifier {
 
   void _filterProducts() {
     if (selectedIndex == 0) {
-      _filteredProducts = _filteredProducts;
+      _filteredProducts = _products;
     } else {
-      _filteredProducts = _filteredProducts
+      _filteredProducts = _products
           .where((product) => product.category == categories[selectedIndex])
           .toList();
     }

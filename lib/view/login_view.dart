@@ -1,4 +1,3 @@
-// login_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rentware/view_model/login_view_model.dart';
@@ -25,8 +24,10 @@ class _LoginPageContent extends StatelessWidget {
     double deviceWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
+          _backgroundImage(),
           SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.05),
@@ -50,13 +51,36 @@ class _LoginPageContent extends StatelessWidget {
     );
   }
 
+  Widget _backgroundImage() {
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/background.jpg'),
+          fit: BoxFit.cover,
+          alignment: Alignment.topCenter,
+          colorFilter: ColorFilter.mode(
+            Colors.white70,
+            BlendMode.dstATop,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _titleWidget() {
     return const Text(
       "RentWare",
       style: TextStyle(
-        color: Colors.black,
-        fontSize: 30,
-        fontWeight: FontWeight.w600,
+        color: Colors.white,
+        fontSize: 36,
+        fontWeight: FontWeight.bold,
+        shadows: [
+          Shadow(
+            offset: Offset(2, 2),
+            blurRadius: 3,
+            color: Colors.black54,
+          ),
+        ],
       ),
     );
   }
@@ -64,7 +88,7 @@ class _LoginPageContent extends StatelessWidget {
   Widget _loginForm(BuildContext context, LoginViewModel viewModel,
       double deviceWidth, double deviceHeight) {
     return SizedBox(
-      height: deviceHeight * 0.30,
+      height: deviceHeight * 0.40,
       child: Form(
         key: viewModel.formKey,
         child: Column(
@@ -75,6 +99,9 @@ class _LoginPageContent extends StatelessWidget {
             _emailTextField(context, viewModel),
             _passwordTextField(context, viewModel),
             if (viewModel.errorMessage != null) _errorText(viewModel),
+            SizedBox(
+              height: deviceHeight * 0.1,
+            ),
             _loginButton(context, viewModel, deviceWidth, deviceHeight),
           ],
         ),
@@ -84,22 +111,26 @@ class _LoginPageContent extends StatelessWidget {
 
   Widget _loginButton(BuildContext context, LoginViewModel viewModel,
       double deviceWidth, double deviceHeight) {
-    return MaterialButton(
+    return ElevatedButton(
       onPressed: () async {
         bool result = await viewModel.loginUser();
         if (result) {
           Navigator.pushNamed(context, "landing");
         }
       },
-      minWidth: deviceWidth * 0.7,
-      height: deviceHeight * 0.06,
-      color: Colors.blue,
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.blueAccent,
+        minimumSize: Size(deviceWidth * 0.7, deviceHeight * 0.06),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
       child: const Text(
         "Login",
         style: TextStyle(
-          color: Colors.white,
-          fontSize: 25,
-          fontWeight: FontWeight.w600,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
@@ -107,7 +138,25 @@ class _LoginPageContent extends StatelessWidget {
 
   Widget _emailTextField(BuildContext context, LoginViewModel viewModel) {
     return TextFormField(
-      decoration: const InputDecoration(hintText: "Email"),
+      controller: viewModel.emailController,
+      decoration: InputDecoration(
+        hintText: "Email",
+        hintStyle: const TextStyle(color: Colors.white),
+        filled: true,
+        fillColor: Colors.black.withOpacity(0.4),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Colors.white70),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Colors.white),
+        ),
+      ),
+      style: const TextStyle(color: Colors.white),
       onChanged: (value) => viewModel.email = value,
       validator: (value) {
         bool result = value!.contains(
@@ -120,7 +169,25 @@ class _LoginPageContent extends StatelessWidget {
   Widget _passwordTextField(BuildContext context, LoginViewModel viewModel) {
     return TextFormField(
       obscureText: true,
-      decoration: const InputDecoration(hintText: "Password"),
+      controller: viewModel.passwordController,
+      decoration: InputDecoration(
+        hintText: "Password",
+        hintStyle: const TextStyle(color: Colors.white70),
+        filled: true,
+        fillColor: Colors.black.withOpacity(0.4),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Colors.white70),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Colors.white),
+        ),
+      ),
+      style: const TextStyle(color: Colors.white),
       onChanged: (value) => viewModel.password = value,
       validator: (value) => value!.length > 6 ? null : "Invalid password",
     );
@@ -132,9 +199,10 @@ class _LoginPageContent extends StatelessWidget {
       child: const Text(
         "Don't have an account?",
         style: TextStyle(
-          color: Colors.blue,
+          color: Colors.white,
           fontSize: 15,
           fontWeight: FontWeight.w600,
+          decoration: TextDecoration.underline,
         ),
       ),
     );

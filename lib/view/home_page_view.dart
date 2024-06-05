@@ -6,6 +6,8 @@ import 'package:rentware/view/details_page_view.dart';
 import 'package:rentware/view_model/home_page_view_model.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(

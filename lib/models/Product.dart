@@ -24,14 +24,15 @@ class Product {
   // Factory constructor for creating a Product instance from a JSON-compatible map
   factory Product.fromMap(Map<String, dynamic> json) {
     return Product(
-        id: json['id'].toString(),
-        title: json['title'] ?? '',
-        description: json['description'] ?? '',
-        price: (json['price'] as num?)?.toDouble() ?? 0.0,
-        imageUrl: json['imageUrl'] ?? '',
-        bgColor: (json['backgroundColor']) ?? 4278255615,
-        availableSizes: json['availableSizes'] ?? 0,
-        contactNumber: json['contactNumber'].toString(),
-        category: json['category'] ?? '');
+      id: json['id'].toString(),
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      imageUrl: json['imageUrl'] ?? '',
+      bgColor: (json['backgroundColor']) ?? 4284512377,
+      availableSizes: json['availableSizes'] ?? 0,
+      contactNumber: json['contactNumber'].toString(),
+      category: json['category'] ?? '',
+    );
   }
 }

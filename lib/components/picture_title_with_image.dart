@@ -16,10 +16,6 @@ class ProductTitleWithImage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            "Aristocratic Hand Bag",
-            style: TextStyle(color: Colors.white),
-          ),
-          Text(
             viewModel.product.title,
             style: Theme.of(context).textTheme.titleLarge!.copyWith(
                   color: Colors.white,

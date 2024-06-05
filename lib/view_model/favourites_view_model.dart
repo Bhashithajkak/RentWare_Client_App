@@ -38,6 +38,7 @@ class FavoritesViewModel extends ChangeNotifier {
   void removeFavoriteItem(String productId) async {
     await _firebaseService.removeFavoriteItem(productId);
     _loadItems();
+    notifyListeners();
   }
 
   @override
